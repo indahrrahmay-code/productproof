@@ -1,4 +1,6 @@
 
+import WalletConnect from "./WalletConnect";
+
 const features = [
   {
     number: "01",
@@ -42,12 +44,15 @@ export default function Home() {
           <a href="#how-it-works" className="hover:text-white">How it works</a>
         </div>
 
-        <a
-          href="#verify"
-          className="rounded-full border border-slate-600 px-5 py-2.5 text-sm font-medium transition hover:border-blue-400 hover:bg-blue-500/10"
-        >
-          Verify Product ↗
-        </a>
+        <div className="flex items-center gap-3">
+          <a
+            href="#verify"
+            className="rounded-full border border-slate-600 px-5 py-2.5 text-sm font-medium transition hover:border-blue-400 hover:bg-blue-500/10"
+          >
+            Verify Product ↗
+          </a>
+          <WalletConnect />
+        </div>
       </nav>
 
       <section className="relative overflow-hidden px-6 pb-24 pt-20 lg:px-10 lg:pb-32 lg:pt-28">
@@ -272,4 +277,3 @@ export default function Home() {
     </main>
   );
 }
-
