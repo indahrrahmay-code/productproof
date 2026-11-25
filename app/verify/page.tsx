@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
 import { Contract, JsonRpcProvider } from "ethers";
-import ProductProofABI from "../abi/ProductProof.json";
-import { CONTRACT_ADDRESS } from "../contractConfig";
+import ProductProofV3Artifact from "../abi/ProductProofV3.json";
+import { CONTRACT_V3_ADDRESS } from "../contractConfig";
 
 type ProductData = {
   brand: string;
@@ -30,8 +30,8 @@ const provider = new JsonRpcProvider(
 );
 
 const contract = new Contract(
-  CONTRACT_ADDRESS,
-  ProductProofABI,
+  CONTRACT_V3_ADDRESS,
+  ProductProofV3Artifact.abi,
   provider
 );
 
@@ -294,7 +294,7 @@ export default function VerifyProduct() {
               </div>
 
               <a
-                href={`https://sepolia.etherscan.io/token/${CONTRACT_ADDRESS}?a=${passportId}`}
+                href={`https://sepolia.etherscan.io/token/${CONTRACT_V3_ADDRESS}?a=${passportId}`}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-5 inline-block text-sm font-medium text-blue-700 hover:underline"

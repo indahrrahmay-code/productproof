@@ -3,8 +3,8 @@
 
 import { useState } from "react";
 import { JsonRpcProvider, Contract } from "ethers";
-import ProductProofABI from "../abi/ProductProof.json";
-import { CONTRACT_ADDRESS } from "../contractConfig";
+import ProductProofV3Artifact from "../abi/ProductProofV3.json";
+import { CONTRACT_V3_ADDRESS } from "../contractConfig";
 
 const RPC_URL = "https://ethereum-sepolia-rpc.publicnode.com";
 
@@ -25,21 +25,44 @@ export default function HistoryPage() {
     try {
       const provider = new JsonRpcProvider(RPC_URL);
       const contract = new Contract(
-        CONTRACT_ADDRESS,
-        ProductProofABI,
+        CONTRACT_V3_ADDRESS,
+        ProductProofV3Artifact.abi,
         provider
       );
 
       const id = Number(tokenId);
+
+      if (!Number.isSafeInteger(id) || id < 0) {
+        throw new Error("Please enter a valid Token ID.");
+      }
+
       const productData = await contract.getProduct(id);
+
+      setProduct({
+        brand: productData.brand,
+        model: productData.model,
+        storageCapacity: productData.storageCapacity,
+        color: productData.color,
+        condition: productData.condition,
+        registrationDate: Number(productData.registrationDate),
+      });
+
       const historyData = await contract.getServiceHistory(id);
 
-      setProduct(productData);
-      setRecords(Array.from(historyData));
+      const formattedRecords = historyData.map((record: any) => ({
+        providerName: record.providerName,
+        serviceType: record.serviceType,
+        description: record.description,
+        serviceDate: Number(record.serviceDate),
+        recordedBy: record.recordedBy,
+      }));
+
+      setRecords(formattedRecords);
     } catch (err: any) {
       setError(
         err?.reason ||
         err?.shortMessage ||
+        err?.message ||
         "Product not found or unable to read blockchain data."
       );
     } finally {
@@ -48,10 +71,7 @@ export default function HistoryPage() {
   }
 
   function formatDate(timestamp: any) {
-    return new Date(Number(timestamp) * 1000).toLocaleString("en-US", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    });
+    return new Date(Number(timestamp) * 1000).toLocaleString("en-GB");
   }
 
   const inputStyle =
@@ -90,7 +110,7 @@ export default function HistoryPage() {
             required
             value={tokenId}
             onChange={(e) => setTokenId(e.target.value)}
-            placeholder="Enter Token ID (e.g. 0)"
+            placeholder="Enter Token ID (e.g. 1)"
             className={inputStyle}
           />
 

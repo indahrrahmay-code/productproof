@@ -39,3 +39,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Hardhat generated files
+/artifacts/
+/cache/
+
+# Local Claude configuration
+/.claude/
+/.agents/
+
+# Local Claude configuration
+/.claude
+/.agents/
+
+# Hardhat deployment outputs and generated types
+/ignition/deployments/
+/types/

@@ -2,7 +2,7 @@
 import { BrowserProvider, Contract } from "ethers";
 import ProductProofABI from "./abi/ProductProof.json";
 import {
-  CONTRACT_ADDRESS,
+  CONTRACT_V2_ADDRESS,
   CONTRACT_CHAIN_ID,
 } from "./contractConfig";
 
@@ -21,7 +21,7 @@ export async function getProductProofContract() {
   const signer = await provider.getSigner();
 
   return new Contract(
-    CONTRACT_ADDRESS,
+    CONTRACT_V2_ADDRESS,
     ProductProofABI,
     signer
   );

@@ -3,12 +3,11 @@
 
 import { useState } from "react";
 import { BrowserProvider, Contract } from "ethers";
-import ProductProofABI from "../abi/ProductProof.json";
-import { CONTRACT_ADDRESS, CONTRACT_CHAIN_ID } from "../contractConfig";
+import ProductProofV3Artifact from "../abi/ProductProofV3.json";
+import { CONTRACT_V3_ADDRESS, CONTRACT_CHAIN_ID } from "../contractConfig";
 
 export default function ServicePage() {
   const [tokenId, setTokenId] = useState("");
-  const [providerName, setProviderName] = useState("");
   const [serviceType, setServiceType] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
@@ -39,14 +38,13 @@ export default function ServicePage() {
       const signer = await provider.getSigner();
 
       const contract = new Contract(
-        CONTRACT_ADDRESS,
-        ProductProofABI,
+        CONTRACT_V3_ADDRESS,
+        ProductProofV3Artifact.abi,
         signer
       );
 
       const tx = await contract.addServiceRecord(
         Number(tokenId),
-        providerName,
         serviceType,
         description
       );
@@ -63,7 +61,6 @@ export default function ServicePage() {
       setMessage("Service record berhasil ditambahkan ke blockchain!");
 
       setTokenId("");
-      setProviderName("");
       setServiceType("");
       setDescription("");
     } catch (error: any) {
@@ -125,18 +122,6 @@ export default function ServicePage() {
             />
           </div>
 
-          <div>
-            <label className="mb-2 block text-sm text-gray-300">
-              Service Provider Name
-            </label>
-            <input
-              required
-              value={providerName}
-              onChange={(e) => setProviderName(e.target.value)}
-              placeholder="Example: PhoneFix Bandung"
-              className={inputStyle}
-            />
-          </div>
 
           <div>
             <label className="mb-2 block text-sm text-gray-300">

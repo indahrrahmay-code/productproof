@@ -4,8 +4,10 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Contract, JsonRpcProvider } from "ethers";
-import ProductProofABI from "../abi/ProductProof.json";
-import { CONTRACT_ADDRESS } from "../contractConfig";
+import ProductProofV3Artifact from "../abi/ProductProofV3.json";
+import { CONTRACT_V3_ADDRESS } from "../contractConfig";
+
+const RPC_URL = "https:" + "//" + "ethereum-sepolia-rpc.publicnode.com";
 
 type Product = {
   id: number;
@@ -25,19 +27,16 @@ export default function Dashboard() {
   useEffect(() => {
     async function loadProducts() {
       try {
-        const provider = new JsonRpcProvider(
-          "https://ethereum-sepolia-rpc.publicnode.com"
-        );
+        const provider = new JsonRpcProvider(RPC_URL);
 
         const contract = new Contract(
-          CONTRACT_ADDRESS,
-          ProductProofABI,
+          CONTRACT_V3_ADDRESS,
+          ProductProofV3Artifact.abi,
           provider
         );
 
         const foundProducts: Product[] = [];
 
-        // Token ID dimulai dari 0 dan bertambah berurutan.
         for (let id = 0; id < 100; id++) {
           try {
             const result = await contract.getProduct(id);
@@ -54,7 +53,6 @@ export default function Dashboard() {
               ).toLocaleString("en-GB"),
             });
           } catch {
-            // Token ID berikutnya belum terdaftar.
             break;
           }
         }
@@ -71,9 +69,8 @@ export default function Dashboard() {
     loadProducts();
   }, []);
 
-  const latestProduct = products.length > 0
-    ? products[products.length - 1]
-    : null;
+  const latestProduct =
+    products.length > 0 ? products[products.length - 1] : null;
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -81,7 +78,6 @@ export default function Dashboard() {
         <Link href="/" className="text-2xl font-bold text-blue-700">
           ProductProof.
         </Link>
-
         <Link
           href="/signin"
           className="rounded-lg border px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
@@ -95,11 +91,9 @@ export default function Dashboard() {
           <p className="text-sm font-medium text-blue-700">
             PRODUCTPROOF WORKSPACE
           </p>
-
           <h1 className="mt-2 text-3xl font-bold text-gray-900">
             Dashboard
           </h1>
-
           <p className="mt-2 text-gray-500">
             Manage your smartphone product passports in one place.
           </p>
@@ -147,7 +141,6 @@ export default function Dashboard() {
           <h2 className="text-xl font-bold text-gray-900">
             Quick Actions
           </h2>
-
           <p className="mt-2 text-sm text-gray-500">
             Choose what you want to do next.
           </p>
@@ -205,22 +198,19 @@ export default function Dashboard() {
                     <p className="text-xs font-semibold text-blue-700">
                       PASSPORT #{product.id}
                     </p>
-
                     <h3 className="mt-1 font-semibold text-gray-900">
                       {product.brand} {product.model}
                     </h3>
-
                     <p className="mt-1 text-sm text-gray-500">
                       {product.storage} · {product.color || "-"} · {product.condition}
                     </p>
-
                     <p className="mt-1 text-xs text-gray-400">
                       {product.registrationDate}
                     </p>
                   </div>
 
                   <Link
-                    href={`/verify`}
+                    href={`/verify?id=${product.id}`}
                     className="text-sm font-medium text-blue-700 hover:underline"
                   >
                     Verify Passport →
