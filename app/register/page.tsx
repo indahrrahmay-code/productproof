@@ -223,9 +223,11 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 
           <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
             <p className="text-sm text-amber-800">
-              <strong>Privacy notice:</strong> Do not enter IMEI, passwords,
-              personal information, or sensitive data. Device information
-              submitted here will be recorded on the Sepolia test blockchain.
+              <strong>Privacy notice:</strong> Your IMEI is used only to
+              generate a secure device fingerprint to prevent duplicate
+              registrations. The raw IMEI is not stored on the blockchain.
+              Other submitted device information will be recorded on the
+              Sepolia test blockchain.
             </p>
           </div>
 
