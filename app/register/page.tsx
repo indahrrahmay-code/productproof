@@ -81,7 +81,10 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
       color,
       condition,
       deviceFingerprint,
-      "https://example.com/productproof/metadata"
+     new URL(
+  `/api/metadata?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}&storage=${encodeURIComponent(storage)}&color=${encodeURIComponent(color)}&condition=${encodeURIComponent(condition)}`,
+  window.location.origin
+).toString()
     );
 
     if (!receipt || receipt.status !== 1) {
